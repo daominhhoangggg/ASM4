@@ -15,28 +15,14 @@ class Menu extends Component {
     this.setState({ selectedStaff: staff });
   }
 
-  renderImage(staff) {
-    if (staff != null) {
-      return (
-        <div className="col-12 col-md-2">
-          <CardImg
-            className="mt-2"
-            width="120%"
-            src={staff.image}
-            alt={staff.name}
-          />
-        </div>
-      );
-    } else {
-      return <div></div>;
-    }
-  }
-
   renderStaff(staff) {
     if (staff != null) {
       return (
-        <div className="col-12 col-md-4 my-2">
-          <div>
+        <div className="row border p-3">
+          <div className="col-12 col-md-6">
+            <CardImg width="120%" src={staff.image} alt={staff.name} />
+          </div>
+          <div className="col-12 col-md-6">
             <CardBody>
               <CardTitle>Họ và tên: {staff.name}</CardTitle>
               <CardText>
@@ -62,21 +48,30 @@ class Menu extends Component {
   }
 
   render() {
-    const menu = this.props.staffs.map((staff) => {
-      return (
-        <div key={staff.id} className="col-12 col-md-4 my-2 pl-2">
-          <Card onClick={() => this.staffSelect(staff)}>
-            <CardTitle className="pl-2 pt-2">{staff.name}</CardTitle>
-          </Card>
+    const menu =
+      this.state.selectedStaff === null ? (
+        this.props.staffs.map((staff) => {
+          return (
+            <div key={staff.id} className="col-12 col-md-4 my-2 pl-2">
+              <Card onClick={() => this.staffSelect(staff)}>
+                <CardTitle className="pl-2 pt-2">{staff.name}</CardTitle>
+              </Card>
+            </div>
+          );
+        })
+      ) : (
+        <div
+          className="col-auto col-md-auto m-2 p-2 rounded text-center border"
+          onClick={() => this.staffSelect(null)}
+        >
+          Nhân viên / {this.state.selectedStaff.name}
         </div>
       );
-    });
 
     return (
       <div className="container">
         <div className="row">{menu}</div>
-        <div className="row" onClick={() => this.staffSelect(null)}>
-          {this.renderImage(this.state.selectedStaff)}
+        <div className="row m-2">
           {this.renderStaff(this.state.selectedStaff)}
         </div>
       </div>
