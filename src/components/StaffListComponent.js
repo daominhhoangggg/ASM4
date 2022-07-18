@@ -55,7 +55,7 @@ class Menu extends Component {
   render() {
     const menu = this.props.staffs.map((staff) => {
       return (
-        <div key={staff.id} className="col-12 col-md-5 m-1">
+        <div key={staff.id} className="col-12 col-md-5 m-2">
           <Card onClick={() => this.staffSelect(staff)}>
             <CardTitle>{staff.name}</CardTitle>
           </Card>
