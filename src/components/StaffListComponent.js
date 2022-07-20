@@ -84,9 +84,7 @@ class Menu extends Component {
     return (
       <div className="container">
         <div className="row">{menu}</div>
-        <div className="row m-2">
-          {this.renderStaff(this.state.selectedStaff)}
-        </div>
+        <div className="row">{this.renderStaff(this.state.selectedStaff)}</div>
       </div>
     );
   }
