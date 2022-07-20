@@ -1,6 +1,5 @@
 import { Navbar, NavbarBrand } from "reactstrap";
 import Menu from "./components/StaffListComponent.js";
-import "./App.css";
 import { STAFFS } from "./shared/staffs";
 import { Component } from "react";
 

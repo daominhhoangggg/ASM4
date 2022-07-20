@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { Card, CardImg, CardText, CardBody, CardTitle } from "reactstrap";
+import {
+  Card,
+  CardImg,
+  CardText,
+  CardBody,
+  CardTitle,
+  Button,
+} from "reactstrap";
 import dateFormat from "dateformat";
 
 class Menu extends Component {
@@ -52,20 +59,26 @@ class Menu extends Component {
       this.state.selectedStaff === null ? (
         this.props.staffs.map((staff) => {
           return (
-            <div key={staff.id} className="col-12 col-md-4 my-2 pl-2">
-              <Card onClick={() => this.staffSelect(staff)}>
-                <CardTitle className="pl-2 pt-2">{staff.name}</CardTitle>
-              </Card>
-            </div>
+            <Button
+              outline
+              color="secondary"
+              key={staff.id}
+              className="col-12 col-md-3 m-2 p-2"
+              onClick={() => this.staffSelect(staff)}
+            >
+              {staff.name}
+            </Button>
           );
         })
       ) : (
-        <div
+        <Button
+          outline
+          color="primary"
           className="col-auto col-md-auto m-2 p-2 rounded text-center border"
           onClick={() => this.staffSelect(null)}
         >
-          Nhân viên / {this.state.selectedStaff.name}
-        </div>
+          Trở về
+        </Button>
       );
 
     return (
