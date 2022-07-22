@@ -1,7 +1,7 @@
-import { Navbar, NavbarBrand } from "reactstrap";
-import Menu from "./components/StaffListComponent.js";
-import { STAFFS } from "./shared/staffs";
-import { Component } from "react";
+import { Navbar, NavbarBrand } from 'reactstrap';
+import Menu from './components/StaffListComponent.js';
+import { STAFFS } from './shared/staffs';
+import { Component } from 'react';
 
 class App extends Component {
   constructor(props) {

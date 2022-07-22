@@ -1,13 +1,6 @@
-import React, { Component } from "react";
-import {
-  Card,
-  CardImg,
-  CardText,
-  CardBody,
-  CardTitle,
-  Button,
-} from "reactstrap";
-import dateFormat from "dateformat";
+import React, { Component } from 'react';
+import { Card, CardGroup, CardImg, CardText, CardBody, CardTitle, Button, Col } from 'reactstrap';
+import dateFormat from 'dateformat';
 
 class Menu extends Component {
   constructor(props) {
@@ -25,58 +18,37 @@ class Menu extends Component {
   renderStaff(staff) {
     if (staff != null) {
       return (
-        <div className="row border p-3">
-          <div className="col-12 col-md-6">
-            <CardImg width="120%" src={staff.image} alt={staff.name} />
-          </div>
-          <div className="col-12 col-md-6">
+        <CardGroup className="border border-primary rounded p-2 mx-2">
+          <CardImg style={{ width: '50%' }} src={staff.image} alt={staff.name} />
+          <Col>
             <CardBody>
               <CardTitle>Họ và tên: {staff.name}</CardTitle>
-              <CardText>
-                Ngày sinh: {dateFormat(staff.doB, "dd/mm/yyyy")}
-              </CardText>
-              <CardText>
-                Ngày vào công ty: {dateFormat(staff.startDate, "dd/mm/yyyy")}
-              </CardText>
+              <CardText>Ngày sinh: {dateFormat(staff.doB, 'dd/mm/yyyy')}</CardText>
+              <CardText>Ngày vào công ty: {dateFormat(staff.startDate, 'dd/mm/yyyy')}</CardText>
               <CardText>Phòng ban: {staff.department.name}</CardText>
               <CardText>Số ngày nghỉ còn lại: {staff.annualLeave}</CardText>
               <CardText>Số ngày đã làm thêm: {staff.overTime}</CardText>
             </CardBody>
-          </div>
-        </div>
+          </Col>
+        </CardGroup>
       );
     } else {
-      return (
-        <div className="col-12 col-md-5 m-1">
-          Bấm vào tên nhân viên để xem thông tin.
-        </div>
-      );
+      return <div className="col-12 col-md-5 m-1">Bấm vào tên nhân viên để xem thông tin.</div>;
     }
   }
 
   render() {
     const menu =
       this.state.selectedStaff === null ? (
-        this.props.staffs.map((staff) => {
+        this.props.staffs.map(staff => {
           return (
-            <Button
-              outline
-              color="secondary"
-              key={staff.id}
-              className="col-12 col-md-3 m-2 p-2"
-              onClick={() => this.staffSelect(staff)}
-            >
+            <Button outline color="secondary" key={staff.id} className="col-12 col-md-3 m-2 p-2" onClick={() => this.staffSelect(staff)}>
               {staff.name}
             </Button>
           );
         })
       ) : (
-        <Button
-          outline
-          color="primary"
-          className="col-auto col-md-auto m-2 p-2 rounded text-center border"
-          onClick={() => this.staffSelect(null)}
-        >
+        <Button color="primary" className="col-auto col-md-auto my-2 p-2 rounded text-center border" onClick={() => this.staffSelect(null)}>
           Trở về
         </Button>
       );
