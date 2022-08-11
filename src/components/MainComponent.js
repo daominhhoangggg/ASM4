@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Staffs from './StaffListComponent';
 import StaffDetail from './StaffDetailComponent';
 import Departments from './DepartmentComponent';
+import Salary from './SalaryComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import { STAFFS } from '../shared/staffs';
@@ -27,6 +28,10 @@ class Main extends Component {
       return <Departments departments={this.state.departments} />;
     };
 
+    const SalaryList = () => {
+      return <Salary staffs={this.state.staffs} />;
+    };
+
     return (
       <div>
         <Header />
@@ -34,6 +39,7 @@ class Main extends Component {
           <Route exact path="/staffs" component={() => <Staffs staffs={this.state.staffs} onClick={staffId => this.onStaffSelect(staffId)} />} />
           <Route path="/staffs/:staffId" component={StaffWithId} />
           <Route path="/departments" component={DepartmentList} />
+          <Route path="/salary" component={SalaryList} />
           <Redirect to="/staffs" />
         </Switch>
         <Footer />
