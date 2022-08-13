@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardHeader, CardText } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import formatDecimal from 'format-decimal';
 
 function RenderSalary({ staff }) {
   return (
@@ -9,7 +9,7 @@ function RenderSalary({ staff }) {
       <CardText>Mã nhân viên: {staff.id}</CardText>
       <CardText>Hệ số lương: {staff.salaryScale}</CardText>
       <CardText>Số ngày làm thêm: {staff.overTime}</CardText>
-      <CardHeader>Lương: {`${staff.salaryScale * 3000000 + staff.overTime * 200000}`} </CardHeader>
+      <CardHeader>Lương: {`${formatDecimal(staff.salaryScale * 3000000 + staff.overTime * 200000, { decimal: '.', thousands: ',', precision: 0 })} VND`} </CardHeader>
     </Card>
   );
 }

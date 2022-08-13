@@ -28,7 +28,7 @@ class Header extends Component {
               <img src="assets/images/logo.png" height="30" width="41" alt="Ứng dụng quản lý nhân sự v1.0" />
             </NavbarBrand>
             <Collapse isOpen={this.state.isNavOpen} navbar>
-              <Nav navbar>
+              <Nav navbar className="ml-2">
                 <NavItem>
                   <NavLink className="nav-link" to="/staffs">
                     <span className="fa fa-users fa-lg"></span> Nhân viên

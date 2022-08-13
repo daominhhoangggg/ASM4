@@ -32,6 +32,33 @@ address {
   background-color: #512da8;
 }
 
-.navbar-expand-md .navbar-collapse {
-  display: inline-flex !important;
+a {
+  color: black;
+}
+
+a:hover {
+  color: rgb(68, 45, 222);
+  text-decoration: none;
+}
+
+.zoom {
+  opacity: 1;
+  transition: 0.1s;
+}
+
+.zoom:hover {
+  -ms-transform: scale(1.05); /* IE 9 */
+  -webkit-transform: scale(1.05); /* Safari 3-8 */
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.zoom:active {
+  opacity: 0.6;
+}
+
+@media (min-width: 768px) {
+  .navbar-expand-md .navbar-collapse {
+    display: inline-flex !important;
+  }
 }
