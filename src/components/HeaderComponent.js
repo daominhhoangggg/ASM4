@@ -22,7 +22,7 @@ class Header extends Component {
     return (
       <React.Fragment>
         <Navbar dark expand="md">
-          <div className="container">
+          <div className="container d-flex">
             <NavbarToggler onClick={this.toggleNav} />
             <NavbarBrand className="mr-auto" href="/">
               <img src="assets/images/logo.png" height="30" width="41" alt="Ứng dụng quản lý nhân sự v1.0" />
