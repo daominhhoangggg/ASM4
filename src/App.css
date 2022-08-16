@@ -56,9 +56,3 @@ a:hover {
 .zoom:active {
   opacity: 0.6;
 }
-
-/* @media (min-width: 768px) {
-  .navbar-expand-md .navbar-collapse {
-    display: inline-flex !important;
-  }
-} */
