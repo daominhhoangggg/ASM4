@@ -3,6 +3,7 @@ import { Button, Card, CardImg, CardText, Label, Modal, ModalBody, ModalHeader, 
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
 import { DatePicker } from 'reactstrap-date-picker';
+import { DEPARTMENTS } from '../shared/staffs';
 
 function RenderStaffListItem({ staff }) {
   return (
@@ -14,6 +15,10 @@ function RenderStaffListItem({ staff }) {
     </Card>
   );
 }
+
+const required = val => val && val.length;
+const maxLength = len => val => !val || val.length < len;
+const minLength = len => val => !val || val.length > len;
 
 class NewStaffForm extends Component {
   constructor(props) {
@@ -37,6 +42,9 @@ class NewStaffForm extends Component {
   }
 
   render() {
+    const departmentOptions = DEPARTMENTS.map(department => {
+      return <option>{department.name}</option>;
+    });
     return (
       <div className="col-md-3">
         <Button onClick={this.toggleModal}>
@@ -51,7 +59,27 @@ class NewStaffForm extends Component {
                   Tên
                 </Label>
                 <Col md={8}>
-                  <Control.text model=".name" name="name" className="form-control" />
+                  <Control.text
+                    model=".name"
+                    id="name"
+                    name="name"
+                    className="form-control"
+                    validators={{
+                      required,
+                      maxLength: maxLength(30),
+                      minLength: minLength(2),
+                    }}
+                  />
+                  <Errors
+                    className="text-danger"
+                    model=".name"
+                    show="touched"
+                    messages={{
+                      required: 'Yêu cầu',
+                      minLength: 'Yêu cầu nhiều hơn 2 kí tự',
+                      maxLenght: 'Yêu cầu ít hơn 30 kí tự',
+                    }}
+                  />
                 </Col>
               </Row>
               <Row className="form-group">
@@ -75,31 +103,33 @@ class NewStaffForm extends Component {
                   Phòng ban
                 </Label>
                 <Col md={8}>
-                  <Control.select model=".departments" name="departments" className="form-control" />
+                  <Control.select model=".departments" name="departments" className="form-control">
+                    {departmentOptions}
+                  </Control.select>
                 </Col>
               </Row>
               <Row className="form-group">
-                <Label htmlFor=".departments" md={4}>
+                <Label htmlFor=".salaryScale" md={4}>
                   Hệ số lương
                 </Label>
                 <Col md={8}>
-                  <Control.text model=".departments" name="departments" className="form-control" />
+                  <Control.text model=".salaryScale" id="salaryScale" name="salaryScale" placeholder="1" className="form-control" />
                 </Col>
               </Row>
               <Row className="form-group">
-                <Label htmlFor=".departments" md={4}>
+                <Label htmlFor=".annualLeave" md={4}>
                   Số ngày nghỉ còn lại
                 </Label>
                 <Col md={8}>
-                  <Control.text model=".departments" name="departments" className="form-control" />
+                  <Control.text model=".annualLeave" id="annualLeave" name="annualLeave" placeholder="0" className="form-control" />
                 </Col>
               </Row>
               <Row className="form-group">
-                <Label htmlFor=".departments" md={4}>
+                <Label htmlFor=".overTime" md={4}>
                   Số ngày đã làm thêm
                 </Label>
                 <Col md={8}>
-                  <Control.text model=".departments" name="departments" className="form-control" />
+                  <Control.text model=".overTime" id="overTime" name="overTime" placeholder="0" className="form-control" />
                 </Col>
               </Row>
             </LocalForm>

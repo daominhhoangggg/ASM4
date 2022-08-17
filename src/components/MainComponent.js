@@ -33,7 +33,7 @@ class Main extends Component {
       <div>
         <Header />
         <Switch>
-          <Route exact path="/staffs" component={() => <Staffs staffs={this.props.staffs} onClick={staffId => this.onStaffSelect(staffId)} />} />
+          <Route exact path="/staffs" component={() => <Staffs staffs={this.props.staffs} departments={this.props.departments} onClick={staffId => this.onStaffSelect(staffId)} />} />
           <Route path="/staffs/:staffId" component={StaffWithId} />
           <Route path="/departments" component={DepartmentList} />
           <Route path="/salary" component={() => <Salary staffs={this.props.staffs} />} />
