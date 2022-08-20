@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
-import { Button, Card, CardImg, CardText, Label, Modal, ModalBody, ModalHeader, Row, Col } from 'reactstrap';
+import {
+  Button,
+  Card,
+  CardImg,
+  CardText,
+  Label,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Row,
+  Col,
+} from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
 import { DEPARTMENTS } from '../shared/staffs';
 import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 function RenderStaffListItem({ staff }) {
   return (
@@ -26,9 +38,19 @@ class NewStaffForm extends Component {
     this.state = {
       departments: DEPARTMENTS,
       isModalOpen: false,
+      name: '',
+      doB: '',
+      startDate: '',
+      salaryScale: '',
+      department: '',
+      annualLeave: '',
+      overTime: '',
+      image: '/assets/images/alberto.png',
     };
 
     this.toggleModal = this.toggleModal.bind(this);
+    this.doBInput = this.doBInput.bind(this);
+    this.startDateInput = this.startDateInput.bind(this);
   }
 
   toggleModal() {
@@ -42,10 +64,23 @@ class NewStaffForm extends Component {
     alert('Current State is: ' + JSON.stringify(values));
   }
 
+  doBInput(date) {
+    this.setState({
+      doB: date,
+    });
+  }
+
+  startDateInput(date) {
+    this.setState({
+      startDate: date,
+    });
+  }
+
   render() {
     const departmentOptions = this.state.departments.map(department => {
       return <option>{department.name}</option>;
     });
+
     return (
       <div className="col-md-3">
         <Button onClick={this.toggleModal}>
@@ -88,7 +123,15 @@ class NewStaffForm extends Component {
                   Ngày sinh
                 </Label>
                 <Col md={8}>
-                  <DatePicker id="doB" dateFormat="dd/MM/yyyy" placeholderText="dd/mm/yyyy" className="form-control" />
+                  <DatePicker
+                    id="doB"
+                    name="doB"
+                    dateFormat="dd/MM/yyyy"
+                    placeholderText="dd/mm/yyyy"
+                    className="form-control"
+                    selected={this.state.doB}
+                    onChange={this.doBInput}
+                  />
                 </Col>
               </Row>
               <Row className="form-group">
@@ -96,7 +139,16 @@ class NewStaffForm extends Component {
                   Ngày vào công ty
                 </Label>
                 <Col>
-                  <DatePicker id="startDate" dateFormat="dd/MM/yyyy" placeholderText="dd/mm/yyyy" className="form-control" />{' '}
+                  <DatePicker
+                    id="startDate"
+                    name="startDate"
+                    dateFormat="dd/MM/yyyy"
+                    placeholderText="dd/mm/yyyy"
+                    className="form-control"
+                    selected={this.state.startDate}
+                    value={this.state.startDate}
+                    onChange={this.startDateInput}
+                  />
                 </Col>
               </Row>
               <Row className="form-group">
@@ -104,7 +156,12 @@ class NewStaffForm extends Component {
                   Phòng ban
                 </Label>
                 <Col md={8}>
-                  <Control.select model=".departments" id="departments" name="departments" className="form-control">
+                  <Control.select
+                    model=".departments"
+                    id="departments"
+                    name="departments"
+                    className="form-control"
+                  >
                     {departmentOptions}
                   </Control.select>
                 </Col>
@@ -114,7 +171,13 @@ class NewStaffForm extends Component {
                   Hệ số lương
                 </Label>
                 <Col md={8}>
-                  <Control.text model=".salaryScale" id="salaryScale" name="salaryScale" defaultValue="1" className="form-control" />
+                  <Control.text
+                    model=".salaryScale"
+                    id="salaryScale"
+                    name="salaryScale"
+                    defaultValue="1"
+                    className="form-control"
+                  />
                 </Col>
               </Row>
               <Row className="form-group">
@@ -122,7 +185,13 @@ class NewStaffForm extends Component {
                   Số ngày nghỉ còn lại
                 </Label>
                 <Col md={8}>
-                  <Control.text model=".annualLeave" id="annualLeave" name="annualLeave" defaultValue="0" className="form-control" />
+                  <Control.text
+                    model=".annualLeave"
+                    id="annualLeave"
+                    name="annualLeave"
+                    defaultValue="0"
+                    className="form-control"
+                  />
                 </Col>
               </Row>
               <Row className="form-group">
@@ -130,7 +199,20 @@ class NewStaffForm extends Component {
                   Số ngày đã làm thêm
                 </Label>
                 <Col md={8}>
-                  <Control.text model=".overTime" id="overTime" name="overTime" defaultValue="0" className="form-control" />
+                  <Control.text
+                    model=".overTime"
+                    id="overTime"
+                    name="overTime"
+                    defaultValue="0"
+                    className="form-control"
+                  />
+                </Col>
+              </Row>
+              <Row className="form-group">
+                <Col md={{ size: 10, offset: 2 }}>
+                  <Button type="submit" color="primary">
+                    Thêm
+                  </Button>
                 </Col>
               </Row>
             </LocalForm>
