@@ -1,21 +1,8 @@
 import React, { Component } from 'react';
-import {
-  Button,
-  Card,
-  CardImg,
-  CardText,
-  Label,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Row,
-  Col,
-} from 'reactstrap';
-import { Control, LocalForm, Errors } from 'react-redux-form';
+import { Button, Card, CardImg, CardText, Label, Modal, ModalBody, ModalHeader, Row, Col, Form, FormGroup, FormFeedback, Input } from 'reactstrap';
+// import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
 import { DEPARTMENTS } from '../shared/staffs';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 
 function RenderStaffListItem({ staff }) {
   return (
@@ -28,13 +15,10 @@ function RenderStaffListItem({ staff }) {
   );
 }
 
-const required = val => val && val.length;
-const maxLength = len => val => !val || val.length < len;
-const minLength = len => val => !val || val.length > len;
-
 class NewStaffForm extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       departments: DEPARTMENTS,
       isModalOpen: false,
@@ -45,12 +29,17 @@ class NewStaffForm extends Component {
       department: '',
       annualLeave: '',
       overTime: '',
-      image: '/assets/images/alberto.png',
+      touched: {
+        name: false,
+        doB: false,
+        startDate: false,
+      },
     };
 
     this.toggleModal = this.toggleModal.bind(this);
-    this.doBInput = this.doBInput.bind(this);
-    this.startDateInput = this.startDateInput.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
   }
 
   toggleModal() {
@@ -59,28 +48,50 @@ class NewStaffForm extends Component {
     });
   }
 
-  handleSubmit(values) {
-    console.log('Current State is: ' + JSON.stringify(values));
-    alert('Current State is: ' + JSON.stringify(values));
+  handleBlur = field => evt => {
+    this.setState({
+      touched: { ...this.state.touched, [field]: true },
+    });
+  };
+
+  validate(name, doB, startDate) {
+    const errors = {
+      name: '',
+      doB: '',
+      startDate: '',
+    };
+
+    if (this.state.touched.name && name.length === 0) errors.name = 'Yêu cầu nhập';
+    else if (this.state.touched.name && name.length < 3) errors.name = 'Yêu cầu nhiều hơn 2 kí tự';
+    else if (this.state.touched.name && name.length > 10) errors.name = 'Yêu cầu ít hơn 11 kí tự';
+
+    if (this.state.touched.doB && doB.length === 0) errors.doB = 'Yêu cầu nhập';
+    if (this.state.touched.startDate && startDate.length === 0) errors.startDate = 'Yêu cầu nhập';
+
+    return errors;
   }
 
-  doBInput(date) {
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
     this.setState({
-      doB: date,
+      [name]: value,
     });
   }
 
-  startDateInput(date) {
-    this.setState({
-      startDate: date,
-    });
+  handleSubmit(event) {
+    console.log('Current State is: ' + JSON.stringify(this.state));
+    alert('Current State is: ' + JSON.stringify(this.state));
+    event.preventDefault();
   }
 
   render() {
     const departmentOptions = this.state.departments.map(department => {
       return <option>{department.name}</option>;
     });
-
+    const errors = this.validate(this.state.name, this.state.doB, this.state.startDate);
     return (
       <div className="col-md-3">
         <Button onClick={this.toggleModal}>
@@ -89,133 +100,103 @@ class NewStaffForm extends Component {
         <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
           <ModalHeader toggle={this.toggleModal}>Thêm nhân viên</ModalHeader>
           <ModalBody>
-            <LocalForm onSubmit={values => this.handleSubmit(values)}>
-              <Row className="form-group">
-                <Label htmlFor=".name" md={4}>
+            <Form onSubmit={this.handleSubmit}>
+              <FormGroup row>
+                <Label htmlFor="name" md={4}>
                   Tên
                 </Label>
                 <Col md={8}>
-                  <Control.text
-                    model=".name"
+                  <Input
+                    type="text"
                     id="name"
                     name="name"
-                    className="form-control"
-                    validators={{
-                      required,
-                      maxLength: maxLength(30),
-                      minLength: minLength(2),
-                    }}
+                    value={this.state.name}
+                    placeholder="Điền tên nhân viên"
+                    invalid={errors.name !== ''}
+                    onBlur={this.handleBlur('name')}
+                    onChange={this.handleInputChange}
                   />
-                  <Errors
-                    className="text-danger"
-                    model=".name"
-                    show="touched"
-                    messages={{
-                      required: 'Yêu cầu',
-                      minLength: 'Yêu cầu nhiều hơn 2 kí tự',
-                      maxLenght: 'Yêu cầu ít hơn 30 kí tự',
-                    }}
-                  />
+                  <FormFeedback>{errors.name}</FormFeedback>
                 </Col>
-              </Row>
-              <Row className="form-group">
-                <Label htmlFor=".doB" md={4}>
+              </FormGroup>
+              <FormGroup row>
+                <Label htmlFor="doB" md={4}>
                   Ngày sinh
                 </Label>
                 <Col md={8}>
-                  <DatePicker
+                  <Input
+                    type="date"
                     id="doB"
                     name="doB"
-                    dateFormat="dd/MM/yyyy"
-                    placeholderText="dd/mm/yyyy"
-                    className="form-control"
-                    selected={this.state.doB}
-                    onChange={this.doBInput}
+                    value={this.state.doB}
+                    placeholder="dd/mm/yyyy"
+                    invalid={errors.doB !== ''}
+                    onBlur={this.handleBlur('doB')}
+                    onChange={this.handleInputChange}
                   />
+                  <FormFeedback>{errors.doB}</FormFeedback>
                 </Col>
-              </Row>
-              <Row className="form-group">
-                <Label htmlFor=".startDate" md={4}>
+              </FormGroup>
+              <FormGroup row>
+                <Label htmlFor="startDate" md={4}>
                   Ngày vào công ty
                 </Label>
-                <Col>
-                  <DatePicker
+                <Col md={8}>
+                  <Input
+                    type="date"
                     id="startDate"
                     name="startDate"
-                    dateFormat="dd/MM/yyyy"
-                    placeholderText="dd/mm/yyyy"
-                    className="form-control"
-                    selected={this.state.startDate}
                     value={this.state.startDate}
-                    onChange={this.startDateInput}
+                    placeholder="dd/mm/yyyy"
+                    invalid={errors.startDate !== ''}
+                    onBlur={this.handleBlur('startDate')}
+                    onChange={this.handleInputChange}
                   />
+                  <FormFeedback>{errors.startDate}</FormFeedback>
                 </Col>
-              </Row>
-              <Row className="form-group">
-                <Label htmlFor=".departments" md={4}>
+              </FormGroup>
+              <FormGroup row>
+                <Label htmlFor="department" md={4}>
                   Phòng ban
                 </Label>
                 <Col md={8}>
-                  <Control.select
-                    model=".departments"
-                    id="departments"
-                    name="departments"
-                    className="form-control"
-                  >
+                  <Input type="select" id="department" name="department" value={this.state.department} onChange={this.handleInputChange}>
                     {departmentOptions}
-                  </Control.select>
+                  </Input>
                 </Col>
-              </Row>
-              <Row className="form-group">
-                <Label htmlFor=".salaryScale" md={4}>
+              </FormGroup>
+              <FormGroup row>
+                <Label htmlFor="salaryScale" md={4}>
                   Hệ số lương
                 </Label>
                 <Col md={8}>
-                  <Control.text
-                    model=".salaryScale"
-                    id="salaryScale"
-                    name="salaryScale"
-                    defaultValue="1"
-                    className="form-control"
-                  />
+                  <Input type="text" id="salaryScale" name="salaryScale" placeholder="1" value={this.state.salaryScale} onChange={this.handleInputChange} />
                 </Col>
-              </Row>
-              <Row className="form-group">
-                <Label htmlFor=".annualLeave" md={4}>
+              </FormGroup>
+              <FormGroup row>
+                <Label htmlFor="annualLeave" md={4}>
                   Số ngày nghỉ còn lại
                 </Label>
                 <Col md={8}>
-                  <Control.text
-                    model=".annualLeave"
-                    id="annualLeave"
-                    name="annualLeave"
-                    defaultValue="0"
-                    className="form-control"
-                  />
+                  <Input type="text" id="annualLeave" name="annualLeave" placeholder="0" value={this.state.annualLeave} onChange={this.handleInputChange} />
                 </Col>
-              </Row>
-              <Row className="form-group">
-                <Label htmlFor=".overTime" md={4}>
+              </FormGroup>
+              <FormGroup row>
+                <Label htmlFor="overTime" md={4}>
                   Số ngày đã làm thêm
                 </Label>
                 <Col md={8}>
-                  <Control.text
-                    model=".overTime"
-                    id="overTime"
-                    name="overTime"
-                    defaultValue="0"
-                    className="form-control"
-                  />
+                  <Input type="text" id="overTime" name="overTime" placeholder="0" value={this.state.overTime} onChange={this.handleInputChange} />
                 </Col>
-              </Row>
-              <Row className="form-group">
+              </FormGroup>
+              <FormGroup row>
                 <Col md={{ size: 10, offset: 2 }}>
                   <Button type="submit" color="primary">
                     Thêm
                   </Button>
                 </Col>
-              </Row>
-            </LocalForm>
+              </FormGroup>
+            </Form>
           </ModalBody>
         </Modal>
       </div>
