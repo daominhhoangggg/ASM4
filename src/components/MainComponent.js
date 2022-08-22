@@ -19,6 +19,16 @@ class Main extends Component {
     };
   }
 
+  addStaff = staff => {
+    const id = Math.floor(Math.random() * 10000 + 1);
+    const newStaff = { id, ...staff };
+    this.setState({
+      staffs: [...this.state.staffs, newStaff],
+    });
+    console.log(newStaff);
+    console.log(this.state.staffs);
+  };
+
   render() {
     const StaffWithId = ({ match }) => {
       return <StaffDetail staff={this.state.staffs.filter(staff => staff.id === parseInt(match.params.staffId, 10))[0]} />;
@@ -32,7 +42,7 @@ class Main extends Component {
       <div>
         <Header />
         <Switch>
-          <Route exact path="/staffs" component={() => <Staffs staffs={this.state.staffs} departments={this.state.departments} onClick={staffId => this.onStaffSelect(staffId)} />} />
+          <Route exact path="/staffs" component={() => <Staffs onAdd={this.addStaff} staffs={this.state.staffs} onClick={staffId => this.onStaffSelect(staffId)} />} />
           <Route path="/staffs/:staffId" component={StaffWithId} />
           <Route path="/departments" component={DepartmentList} />
           <Route path="/salary" component={() => <Salary staffs={this.state.staffs} />} />

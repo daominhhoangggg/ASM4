@@ -47,7 +47,7 @@ const Staffs = props => {
         <div className="col-md-3">
           <h3>Nhân viên</h3>
         </div>
-        <NewStaffForm />
+        <NewStaffForm onAdd={props.onAdd} departments={props.departments} />
         <div className="col-md-6">
           <Form onSubmit={onSearch}>
             <FormGroup row>

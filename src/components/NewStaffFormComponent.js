@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Label, Modal, ModalBody, ModalHeader, Row, Col, Form, FormGroup, FormFeedback, Input } from 'reactstrap';
-import { DEPARTMENTS, STAFFS } from '../shared/staffs';
+import { DEPARTMENTS } from '../shared/staffs';
 
 class NewStaffForm extends Component {
   constructor(props) {
@@ -12,10 +12,10 @@ class NewStaffForm extends Component {
       name: '',
       doB: '',
       startDate: '',
-      salaryScale: '',
+      salaryScale: 1,
       department: '',
-      annualLeave: '',
-      overTime: '',
+      annualLeave: 0,
+      overTime: 0,
       touched: {
         name: false,
         doB: false,
@@ -48,19 +48,19 @@ class NewStaffForm extends Component {
       startDate: '',
     };
 
-    if (this.state.touched.name && name.length === 0) errors.name = 'Yêu cầu nhập';
+    if (this.state.touched.name && name.length < 1) errors.name = 'Yêu cầu nhập';
     else if (this.state.touched.name && name.length < 3) errors.name = 'Yêu cầu nhiều hơn 2 kí tự';
     else if (this.state.touched.name && name.length > 10) errors.name = 'Yêu cầu ít hơn 11 kí tự';
 
-    if (this.state.touched.doB && doB.length === 0) errors.doB = 'Yêu cầu nhập';
-    if (this.state.touched.startDate && startDate.length === 0) errors.startDate = 'Yêu cầu nhập';
+    if (this.state.touched.doB && doB.length < 1) errors.doB = 'Yêu cầu nhập';
+    if (this.state.touched.startDate && startDate.length < 1) errors.startDate = 'Yêu cầu nhập';
 
     return errors;
   }
 
   handleInputChange(event) {
     const target = event.target;
-    const value = target.name === 'department' ? `DEPARTMENT[${DEPARTMENTS.indexOf(DEPARTMENTS.filter(department => department.name === target.value)[0]) + 1}]` : target.value;
+    const value = target.name === 'department' ? DEPARTMENTS.filter(department => department.name === target.value)[0] : target.value;
     const name = target.name;
 
     this.setState({
@@ -80,7 +80,9 @@ class NewStaffForm extends Component {
       image: '/assets/images/alberto.png',
     };
 
-    STAFFS.push(newStaff);
+    this.props.onAdd(newStaff);
+
+    event.preventDefault();
   }
 
   render() {
@@ -102,16 +104,7 @@ class NewStaffForm extends Component {
                   Tên
                 </Label>
                 <Col md={8}>
-                  <Input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={this.state.name}
-                    placeholder="Điền tên nhân viên"
-                    invalid={errors.name !== ''}
-                    onBlur={this.handleBlur('name')}
-                    onChange={this.handleInputChange}
-                  />
+                  <Input type="text" id="name" name="name" value={this.state.name} placeholder="Điền tên nhân viên" invalid={errors.name !== ''} onBlur={this.handleBlur('name')} onChange={this.handleInputChange} />
                   <FormFeedback>{errors.name}</FormFeedback>
                 </Col>
               </FormGroup>
@@ -120,16 +113,7 @@ class NewStaffForm extends Component {
                   Ngày sinh
                 </Label>
                 <Col md={8}>
-                  <Input
-                    type="date"
-                    id="doB"
-                    name="doB"
-                    value={this.state.doB}
-                    placeholder="dd/mm/yyyy"
-                    invalid={errors.doB !== ''}
-                    onBlur={this.handleBlur('doB')}
-                    onChange={this.handleInputChange}
-                  />
+                  <Input type="date" id="doB" name="doB" value={this.state.doB} placeholder="dd/mm/yyyy" invalid={errors.doB !== ''} onBlur={this.handleBlur('doB')} onChange={this.handleInputChange} />
                   <FormFeedback>{errors.doB}</FormFeedback>
                 </Col>
               </FormGroup>
@@ -138,16 +122,7 @@ class NewStaffForm extends Component {
                   Ngày vào công ty
                 </Label>
                 <Col md={8}>
-                  <Input
-                    type="date"
-                    id="startDate"
-                    name="startDate"
-                    value={this.state.startDate}
-                    placeholder="dd/mm/yyyy"
-                    invalid={errors.startDate !== ''}
-                    onBlur={this.handleBlur('startDate')}
-                    onChange={this.handleInputChange}
-                  />
+                  <Input type="date" id="startDate" name="startDate" value={this.state.startDate} placeholder="dd/mm/yyyy" invalid={errors.startDate !== ''} onBlur={this.handleBlur('startDate')} onChange={this.handleInputChange} />
                   <FormFeedback>{errors.startDate}</FormFeedback>
                 </Col>
               </FormGroup>
