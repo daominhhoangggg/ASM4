@@ -51,20 +51,26 @@ class NewStaffForm extends Component {
   }
 
   handleSubmit(values) {
-    const newStaff = {
-      name: values.name,
-      doB: values.doB,
-      salaryScale: values.salaryScale,
-      startDate: values.startDate,
-      department: DEPARTMENTS.filter(
-        department => department.name === values.department
-      )[0],
-      annualLeave: values.annualLeave,
-      overTime: values.overTime,
-      image: '/assets/images/alberto.png',
-    };
+    // const newStaff = {
+    //   name: values.name,
+    //   doB: values.doB,
+    //   salaryScale: values.salaryScale,
+    //   startDate: values.startDate,
+    //   department: DEPARTMENTS.filter(department => department.name === values.department)[0],
+    //   annualLeave: values.annualLeave,
+    //   overTime: values.overTime,
+    //   image: '/assets/images/alberto.png',
+    // };
 
-    this.props.onAdd(newStaff);
+    this.props.addStaff(
+      values.name,
+      values.doB,
+      values.salaryScale,
+      values.startDate,
+      values.department,
+      values.annualLeave,
+      values.overTime
+    );
   }
 
   render() {

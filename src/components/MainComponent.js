@@ -7,6 +7,7 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { addStaff } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
   return {
@@ -15,28 +16,30 @@ const mapStateToProps = state => {
   };
 };
 
+const mapDispatchToProps = dispatch => ({
+  addStaff: (name, doB, salaryScale, startDate, department, annualLeave, overTime, image) =>
+    dispatch(addStaff(name, doB, salaryScale, startDate, department, annualLeave, overTime, image)),
+});
+
 class Main extends Component {
   constructor(props) {
     super(props);
   }
 
-  addStaff = staff => {
-    const id = Math.floor(Math.random() * 10000 + 1);
-    const newStaff = { id, ...staff };
+  // addStaff = staff => {
+  //   const id = Math.floor(Math.random() * 10000 + 1);
+  //   const newStaff = { id, ...staff };
 
-    this.props.staffs.push(newStaff);
-    console.log(newStaff);
-    console.log(this.props.staffs);
-  };
+  //   console.log(newStaff);
+  //   console.log(this.props.staffs);
+  // };
 
   render() {
     const StaffWithId = ({ match }) => {
       return (
         <StaffDetail
           staff={
-            this.props.staffs.filter(
-              staff => staff.id === parseInt(match.params.staffId, 10)
-            )[0]
+            this.props.staffs.filter(staff => staff.id === parseInt(match.params.staffId, 10))[0]
           }
         />
       );
@@ -55,7 +58,7 @@ class Main extends Component {
             path="/staffs"
             component={() => (
               <Staffs
-                onAdd={this.addStaff}
+                addStaff={this.props.addStaff}
                 staffs={this.props.staffs}
                 onClick={staffId => this.onStaffSelect(staffId)}
               />
@@ -72,4 +75,4 @@ class Main extends Component {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

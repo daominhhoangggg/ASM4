@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardImg, CardText, Form, FormGroup, Col, Button, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import NewStaffForm from './NewStaffFormComponent';
+import { addStaff } from '../redux/ActionCreators';
 
 function RenderStaffListItem({ staff }) {
   return (
@@ -47,7 +48,7 @@ const Staffs = props => {
         <div className="col-md-3">
           <h3>Nhân viên</h3>
         </div>
-        <NewStaffForm onAdd={props.onAdd} departments={props.departments} />
+        <NewStaffForm addStaff={props.addStaff} departments={props.departments} />
         <div className="col-md-6">
           <Form onSubmit={onSearch}>
             <FormGroup row>
