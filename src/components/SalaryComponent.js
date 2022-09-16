@@ -9,7 +9,11 @@ function RenderSalary({ staff }) {
       <CardText>Mã nhân viên: {staff.id}</CardText>
       <CardText>Hệ số lương: {staff.salaryScale}</CardText>
       <CardText>Số ngày làm thêm: {staff.overTime}</CardText>
-      <CardHeader>Lương: {`${formatDecimal(staff.salaryScale * 3000000 + staff.overTime * 200000, { decimal: '.', thousands: ',', precision: 0 })} VND`} </CardHeader>
+      <CardHeader>{`${formatDecimal(staff.salary, {
+        decimal: '.',
+        thousands: ',',
+        precision: 0,
+      })} VND`}</CardHeader>
     </Card>
   );
 }

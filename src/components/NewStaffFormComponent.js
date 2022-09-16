@@ -1,17 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Button,
-  Label,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Row,
-  Col,
-  Form,
-  FormGroup,
-  FormFeedback,
-  Input,
-} from 'reactstrap';
+import { Button, Label, Modal, ModalBody, ModalHeader, Row, Col, Form, FormGroup, FormFeedback, Input } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { DEPARTMENTS } from '../shared/staffs';
 
@@ -62,15 +50,7 @@ class NewStaffForm extends Component {
     //   image: '/assets/images/alberto.png',
     // };
 
-    this.props.addStaff(
-      values.name,
-      values.doB,
-      values.salaryScale,
-      values.startDate,
-      values.department,
-      values.annualLeave,
-      values.overTime
-    );
+    this.props.addStaff(values.name, values.doB, values.salaryScale, values.startDate, values.department, values.annualLeave, values.overTime);
   }
 
   render() {
@@ -174,12 +154,7 @@ class NewStaffForm extends Component {
                   Phòng ban
                 </Label>
                 <Col md={8}>
-                  <Control.select
-                    model=".department"
-                    id="department"
-                    name="department"
-                    className="form-control"
-                  >
+                  <Control.select model=".department" id="department" name="department" className="form-control">
                     {departmentOptions}
                   </Control.select>
                 </Col>
@@ -189,13 +164,7 @@ class NewStaffForm extends Component {
                   Hệ số lương
                 </Label>
                 <Col md={8}>
-                  <Control.text
-                    model=".salaryScale"
-                    id="salaryScale"
-                    name="salaryScale"
-                    placeholder="1"
-                    className="form-control"
-                  />
+                  <Control.text model=".salaryScale" id="salaryScale" name="salaryScale" placeholder="1" className="form-control" />
                 </Col>
               </Row>
               <Row className="form-group">
@@ -203,13 +172,7 @@ class NewStaffForm extends Component {
                   Số ngày nghỉ còn lại
                 </Label>
                 <Col md={8}>
-                  <Control.text
-                    model=".annualLeave"
-                    id="annualLeave"
-                    name="annualLeave"
-                    placeholder="0"
-                    className="form-control"
-                  />
+                  <Control.text model=".annualLeave" id="annualLeave" name="annualLeave" placeholder="0" className="form-control" />
                 </Col>
               </Row>
               <Row className="form-group">
@@ -217,13 +180,7 @@ class NewStaffForm extends Component {
                   Số ngày đã làm thêm
                 </Label>
                 <Col md={8}>
-                  <Control.text
-                    model=".overTime"
-                    id="overTime"
-                    name="overTime"
-                    placeholder="0"
-                    className="form-control"
-                  />
+                  <Control.text model=".overTime" id="overTime" name="overTime" placeholder="0" className="form-control" />
                 </Col>
               </Row>
               <Row className="form-group">

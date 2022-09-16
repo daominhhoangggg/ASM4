@@ -3,6 +3,7 @@ import { Card, CardImg, CardText, Form, FormGroup, Col, Button, Input } from 're
 import { Link } from 'react-router-dom';
 import NewStaffForm from './NewStaffFormComponent';
 import { addStaff } from '../redux/ActionCreators';
+import { Loading } from './LoadingComponent';
 
 function RenderStaffListItem({ staff }) {
   return (
@@ -42,40 +43,58 @@ const Staffs = props => {
       );
     });
 
-  return (
-    <div className="container my-3">
-      <div className="row">
-        <div className="col-md-3">
-          <h3>Nhân viên</h3>
-        </div>
-        <NewStaffForm addStaff={props.addStaff} departments={props.departments} />
-        <div className="col-md-6">
-          <Form onSubmit={onSearch}>
-            <FormGroup row>
-              <Col md={10}>
-                <Input
-                  type="search"
-                  name="search"
-                  placeholder="Tìm nhân viên"
-                  value={key}
-                  onChange={e => {
-                    onChangeSearch(e.target.value);
-                  }}
-                />
-              </Col>
-              <Col md={2}>
-                <Button type="submit" color="primary">
-                  <span className="fa fa-search fa-md"></span>
-                </Button>
-              </Col>
-            </FormGroup>
-          </Form>
+  if (props.staffsLoading) {
+    return (
+      <div className="container my-3">
+        <div className="row">
+          <Loading />
         </div>
       </div>
-      <hr />
-      <div className="row">{staffs}</div>
-    </div>
-  );
+    );
+  } else if (props.staffsErrMess) {
+    return (
+      <div className="container my-3">
+        <div className="row">
+          <h4>{props.staffs.errMess}</h4>
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="container my-3">
+        <div className="row">
+          <div className="col-md-3">
+            <h3>Nhân viên</h3>
+          </div>
+          <NewStaffForm addStaff={props.addStaff} departments={props.departments} />
+          <div className="col-md-6">
+            <Form onSubmit={onSearch}>
+              <FormGroup row>
+                <Col md={10}>
+                  <Input
+                    type="search"
+                    name="search"
+                    placeholder="Tìm nhân viên"
+                    value={key}
+                    onChange={e => {
+                      onChangeSearch(e.target.value);
+                    }}
+                  />
+                </Col>
+                <Col md={2}>
+                  <Button type="submit" color="primary">
+                    <span className="fa fa-search fa-md"></span>
+                  </Button>
+                </Col>
+              </FormGroup>
+            </Form>
+          </div>
+        </div>
+        <hr />
+        <div className="row">{staffs}</div>
+      </div>
+    );
+  }
 };
 
 export default Staffs;

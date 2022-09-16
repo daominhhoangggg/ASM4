@@ -2,8 +2,10 @@ import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardImg, Col, Row } from 'reactstrap';
 import dateFormat from 'dateformat';
 import { Link } from 'react-router-dom';
+import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
-function RenderStaff({ staff }) {
+function RenderStaff({ staff, department }) {
   return (
     <div className="col-12 my-2">
       <Card>
@@ -16,7 +18,7 @@ function RenderStaff({ staff }) {
               <h4>Họ và tên: {staff.name}</h4>
               <p>Ngày sinh: {dateFormat(staff.doB, 'dd/mm/yyyy')}</p>
               <p>Ngày vào công ty: {dateFormat(staff.startDate, 'dd/mm/yyyy')}</p>
-              <p>Phòng ban: {staff.department.name}</p>
+              <p>Phòng ban: {department}</p>
               <p>Số ngày nghỉ còn lại: {staff.annualLeave}</p>
               <p>Số ngày đã làm thêm: {staff.overTime}</p>
             </CardBody>
@@ -28,7 +30,26 @@ function RenderStaff({ staff }) {
 }
 
 const StaffDetail = props => {
-  if (props.staff != null) {
+  if (props.isLoading) {
+    return (
+      <div className="container my-3">
+        <div className="row">
+          <Loading />
+        </div>
+      </div>
+    );
+  } else if (props.errMess) {
+    return (
+      <div className="container my-3">
+        <div className="row">
+          <h4>{props.errMess}</h4>
+        </div>
+      </div>
+    );
+  } else if (props.staff != null) {
+    const departmentName = props.departments.filter(
+      department => department.id == props.staff.departmentId
+    )[0].name;
     return (
       <div className="container my-3">
         <div className="row">
@@ -40,7 +61,7 @@ const StaffDetail = props => {
           </Breadcrumb>
         </div>
         <div className="row">
-          <RenderStaff staff={props.staff} />
+          <RenderStaff staff={props.staff} department={departmentName} />
         </div>
       </div>
     );
