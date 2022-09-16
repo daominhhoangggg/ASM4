@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Label, Modal, ModalBody, ModalHeader, Row, Col, Form, FormGroup, FormFeedback, Input } from 'reactstrap';
+import { Button, Label, Modal, ModalBody, ModalHeader, Row, Col } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { DEPARTMENTS } from '../shared/staffs';
 
@@ -39,18 +39,7 @@ class NewStaffForm extends Component {
   }
 
   handleSubmit(values) {
-    // const newStaff = {
-    //   name: values.name,
-    //   doB: values.doB,
-    //   salaryScale: values.salaryScale,
-    //   startDate: values.startDate,
-    //   department: DEPARTMENTS.filter(department => department.name === values.department)[0],
-    //   annualLeave: values.annualLeave,
-    //   overTime: values.overTime,
-    //   image: '/assets/images/alberto.png',
-    // };
-
-    this.props.addStaff(values.name, values.doB, values.salaryScale, values.startDate, values.department, values.annualLeave, values.overTime);
+    this.props.postStaff(values.name, values.doB, values.salaryScale, values.startDate, values.department, values.annualLeave, values.overTime);
   }
 
   render() {

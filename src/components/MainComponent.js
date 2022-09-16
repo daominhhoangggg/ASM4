@@ -7,7 +7,7 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addStaff, fetchStaffs, fetchDepartments, fetchSalary } from '../redux/ActionCreators';
+import { postStaff, fetchStaffs, fetchDepartments, fetchSalary } from '../redux/ActionCreators';
 import DeptStaffs from './DeptDetailComponent';
 
 const mapStateToProps = state => {
@@ -19,8 +19,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  addStaff: (name, doB, salaryScale, startDate, department, annualLeave, overTime, image) =>
-    dispatch(addStaff(name, doB, salaryScale, startDate, department, annualLeave, overTime, image)),
+  postStaff: (name, doB, salaryScale, startDate, department, annualLeave, overTime) =>
+    dispatch(postStaff(name, doB, salaryScale, startDate, department, annualLeave, overTime)),
   fetchStaffs: () => {
     dispatch(fetchStaffs());
   },
@@ -44,6 +44,19 @@ class Main extends Component {
   }
 
   render() {
+    const StaffsList = () => {
+      return (
+        <Staffs
+          addStaff={this.props.addStaff}
+          staffs={this.props.staffs.staffs}
+          onClick={staffId => this.onStaffSelect(staffId)}
+          staffsLoading={this.props.staffs.isLoading}
+          staffsErrMess={this.props.staffs.errMess}
+          postStaff={this.props.postStaff}
+        />
+      );
+    };
+
     const StaffWithId = ({ match }) => {
       return (
         <StaffDetail
@@ -90,19 +103,7 @@ class Main extends Component {
       <div>
         <Header />
         <Switch>
-          <Route
-            exact
-            path="/staffs"
-            component={() => (
-              <Staffs
-                addStaff={this.props.addStaff}
-                staffs={this.props.staffs.staffs}
-                onClick={staffId => this.onStaffSelect(staffId)}
-                staffsLoading={this.props.staffs.isLoading}
-                staffsErrMess={this.props.staffs.errMess}
-              />
-            )}
-          />
+          <Route exact path="/staffs" component={StaffsList} />
           <Route path="/staffs/:staffId" component={StaffWithId} />
           <Route exact path="/departments" component={DepartmentList} />
           <Route path="/departments/:departmentId" component={DeptStaffsList} />

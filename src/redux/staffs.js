@@ -20,9 +20,7 @@ export const Staffs = (
 
     case ActionTypes.ADD_STAFF:
       var staff = action.payload;
-      staff.id = state.length;
-      staff.image = '/assets/images/alberto.png';
-      return state.staffs.concat(staff);
+      return { ...state, staffs: state.staffs.concat(staff) };
 
     default:
       return state;

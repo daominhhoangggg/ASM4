@@ -3,18 +3,81 @@ import { DEPARTMENTS } from '../shared/staffs';
 import { STAFFS } from '../shared/staffs';
 import { baseUrl } from '../shared/baseUrl';
 
-export const addStaff = (name, doB, salaryScale, startDate, department, annualLeave, overTime) => ({
+//Thêm nhân viên
+export const addStaff = staff => ({
   type: ActionTypes.ADD_STAFF,
-  payload: {
-    name: name,
-    doB: doB,
-    salaryScale: salaryScale,
-    startDate: startDate,
-    department: DEPARTMENTS.filter(dept => dept.name === department)[0],
-    annualLeave: annualLeave,
-    overTime: overTime,
-  },
+  payload: staff,
 });
+
+//Upload
+export const postStaff =
+  (
+    name,
+    doB,
+    salaryScale,
+    startDate,
+    department,
+    annualLeave,
+    overTime
+  ) =>
+  dispatch => {
+    const newStaff = {
+      id: 100,
+      name: name,
+      doB: doB,
+      salaryScale: salaryScale,
+      startDate: startDate,
+      departmentId: DEPARTMENTS.filter(
+        dept => dept.name === department
+      )[0].id,
+      annualLeave: annualLeave,
+      overTime: overTime,
+      image: '/assets/images/alberto.png',
+      salary:
+        salaryScale * 3000000 + overTime * 200000,
+    };
+
+    return fetch(baseUrl + 'staffs', {
+      method: 'POST',
+      body: JSON.stringify(newStaff),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin',
+    })
+      .then(
+        response => {
+          if (response.ok) {
+            return response;
+          } else {
+            var error = new Error(
+              'Error ' +
+                response.status +
+                ': ' +
+                response.statusText
+            );
+            error.response = response;
+            throw error;
+          }
+        },
+        error => {
+          throw error;
+        }
+      )
+      .then(response => response.json())
+      .then(response => {
+        dispatch(addStaff(response));
+      })
+      .catch(error => {
+        console.log('post staff', error.message);
+        alert(
+          "Your staff's information could not be uploaded\nError: " +
+            error.message
+        );
+      });
+  };
+
+//Xóa nhân viên
 
 //Staffs
 export const fetchStaffs = () => dispatch => {
@@ -40,13 +103,16 @@ export const addStaffs = staffs => ({
 });
 
 //Departments
-export const fetchDepartments = () => dispatch => {
-  dispatch(departmentsLoading(true));
+export const fetchDepartments =
+  () => dispatch => {
+    dispatch(departmentsLoading(true));
 
-  return fetch(baseUrl + 'departments')
-    .then(response => response.json())
-    .then(departments => dispatch(addDepartments(departments)));
-};
+    return fetch(baseUrl + 'departments')
+      .then(response => response.json())
+      .then(departments =>
+        dispatch(addDepartments(departments))
+      );
+  };
 
 export const departmentsLoading = () => ({
   type: ActionTypes.DEPARTMENTS_LOADING,

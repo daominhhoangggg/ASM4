@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Card, CardImg, CardText, Form, FormGroup, Col, Button, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import NewStaffForm from './NewStaffFormComponent';
-import { addStaff } from '../redux/ActionCreators';
 import { Loading } from './LoadingComponent';
 
 function RenderStaffListItem({ staff }) {
@@ -66,7 +65,7 @@ const Staffs = props => {
           <div className="col-md-3">
             <h3>Nhân viên</h3>
           </div>
-          <NewStaffForm addStaff={props.addStaff} departments={props.departments} />
+          <NewStaffForm departments={props.departments} postStaff={props.postStaff} />
           <div className="col-md-6">
             <Form onSubmit={onSearch}>
               <FormGroup row>
