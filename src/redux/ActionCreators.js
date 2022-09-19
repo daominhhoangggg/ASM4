@@ -43,22 +43,35 @@ export const postStaff = newStaff => dispatch => {
 };
 
 //Xóa nhân viên
-export const deleteStaffSuccess = id => ({
+export const deleteStaffSuccess = staffs => ({
   type: ActionTypes.DELETE_STAFF,
-  payload: id,
+  payload: staffs,
 });
 
 export const deleteStaff = id => dispatch => {
   if (confirm('Bạn chắc chắn muốn xóa nhân viên này?')) {
     return fetch(baseUrl + `staffs/${id}`, {
       method: 'DELETE',
-    }).then(() => {
-      dispatch(deleteStaffSuccess(id));
-    });
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+        dispatch(deleteStaffSuccess(response));
+      });
   } else return;
 };
 
-//Cập nhật
+//Cập nhật thông tin nhân viên
+export const updateStaffSuccess = staffs => ({
+  type: ActionTypes.UPDATE_STAFF,
+  payload: staffs,
+});
+
+export const updateStaff = id => dispatch => {
+  return fetch(baseUrl + `staffs/${id}`, {
+    method: 'PATCH',
+  });
+};
 
 //Staffs
 export const fetchStaffs = () => dispatch => {

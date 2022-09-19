@@ -1,5 +1,5 @@
 import React from 'react';
-import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardImg, Col, Row } from 'reactstrap';
+import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardImg, Col, Row } from 'reactstrap';
 import dateFormat from 'dateformat';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
@@ -21,6 +21,9 @@ function RenderStaff({ staff, department }) {
               <p>Phòng ban: {department}</p>
               <p>Số ngày nghỉ còn lại: {staff.annualLeave}</p>
               <p>Số ngày đã làm thêm: {staff.overTime}</p>
+              <Button type="submit" className="btn-sm" color="success">
+                Chỉnh sửa
+              </Button>
             </CardBody>
           </Col>
         </Row>
@@ -47,9 +50,7 @@ const StaffDetail = props => {
       </div>
     );
   } else if (props.staff != null) {
-    const departmentName = props.departments.filter(
-      department => department.id == props.staff.departmentId
-    )[0].name;
+    const departmentName = props.departments.filter(department => department.id == props.staff.departmentId)[0].name;
     return (
       <div className="container my-3">
         <div className="row">

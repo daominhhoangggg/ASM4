@@ -21,6 +21,9 @@ export const Staffs = (
     case ActionTypes.ADD_STAFF:
       return { ...state, isLoading: false, errMess: null, staffs: action.payload };
 
+    case ActionTypes.DELETE_STAFF:
+      return { ...state, staffs: action.payload };
+
     default:
       return state;
   }

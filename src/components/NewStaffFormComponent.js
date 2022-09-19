@@ -41,7 +41,7 @@ class NewStaffForm extends Component {
 
   handleSubmit(values) {
     const newStaff = {
-      id: 100,
+      id: Math.floor(Math.random() * 100 + 10),
       name: values.name,
       doB: values.doB,
       salaryScale: Number(values.salaryScale),
