@@ -1,31 +1,19 @@
 import React, { useState } from 'react';
-import {
-  Card,
-  CardImg,
-  CardText,
-  Form,
-  FormGroup,
-  Col,
-  Button,
-  Input,
-} from 'reactstrap';
+import { Card, CardImg, CardImgOverlay, CardText, Form, FormGroup, Col, Button, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import NewStaffForm from './NewStaffFormComponent';
 import { Loading } from './LoadingComponent';
 
-function RenderStaffListItem({ staff }) {
+function RenderStaffListItem({ staff, onDelete }) {
   return (
     <Card className="zoom">
       <Link to={`/staffs/${staff.id}`}>
-        <CardImg
-          width="100%"
-          src={staff.image}
-          alt={staff.name}
-        />
-        <CardText className="text-center p-1">
-          {staff.name}
-        </CardText>
+        <CardImg width="100%" src={staff.image} alt={staff.name} />
+        <CardText className="text-center p-1">{staff.name}</CardText>
       </Link>
+      <Button className="btn-sm" color="danger" onClick={() => onDelete(staff.id)}>
+        Delete
+      </Button>
     </Card>
   );
 }
@@ -47,17 +35,12 @@ const Staffs = props => {
 
   const staffs = props.staffs
     .filter(staff => {
-      return staff.name
-        .toLowerCase()
-        .includes(keywords.toLowerCase());
+      return staff.name.toLowerCase().includes(keywords.toLowerCase());
     })
     .map(staff => {
       return (
-        <div
-          key={staff.id}
-          className="col-6 col-md-4 col-lg-2 my-2"
-        >
-          <RenderStaffListItem staff={staff} />
+        <div key={staff.id} className="col-6 col-md-4 col-lg-2 my-2">
+          <RenderStaffListItem staff={staff} onDelete={props.onDelete} />
         </div>
       );
     });
@@ -85,10 +68,7 @@ const Staffs = props => {
           <div className="col-md-3">
             <h3>Nhân viên</h3>
           </div>
-          <NewStaffForm
-            departments={props.departments}
-            postStaff={props.postStaff}
-          />
+          <NewStaffForm departments={props.departments} postStaff={props.postStaff} />
           <div className="col-md-6">
             <Form onSubmit={onSearch}>
               <FormGroup row>
@@ -99,17 +79,12 @@ const Staffs = props => {
                     placeholder="Tìm nhân viên"
                     value={key}
                     onChange={e => {
-                      onChangeSearch(
-                        e.target.value
-                      );
+                      onChangeSearch(e.target.value);
                     }}
                   />
                 </Col>
                 <Col md={2}>
-                  <Button
-                    type="submit"
-                    color="primary"
-                  >
+                  <Button type="submit" color="primary">
                     <span className="fa fa-search fa-md"></span>
                   </Button>
                 </Col>

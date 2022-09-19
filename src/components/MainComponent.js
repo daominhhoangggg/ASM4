@@ -7,7 +7,7 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { postStaff, fetchStaffs, fetchDepartments, fetchSalary } from '../redux/ActionCreators';
+import { postStaff, deleteStaff, fetchStaffs, fetchDepartments, fetchSalary } from '../redux/ActionCreators';
 import DeptStaffs from './DeptDetailComponent';
 
 const mapStateToProps = state => {
@@ -19,8 +19,12 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  postStaff: (name, doB, salaryScale, startDate, department, annualLeave, overTime) =>
-    dispatch(postStaff(name, doB, salaryScale, startDate, department, annualLeave, overTime)),
+  postStaff: newStaff => {
+    dispatch(postStaff(newStaff));
+  },
+  deleteStaff: id => {
+    dispatch(deleteStaff(id));
+  },
   fetchStaffs: () => {
     dispatch(fetchStaffs());
   },
@@ -53,6 +57,7 @@ class Main extends Component {
           staffsLoading={this.props.staffs.isLoading}
           staffsErrMess={this.props.staffs.errMess}
           postStaff={this.props.postStaff}
+          onDelete={this.props.deleteStaff}
         />
       );
     };
@@ -60,11 +65,7 @@ class Main extends Component {
     const StaffWithId = ({ match }) => {
       return (
         <StaffDetail
-          staff={
-            this.props.staffs.staffs.filter(
-              staff => staff.id === parseInt(match.params.staffId, 10)
-            )[0]
-          }
+          staff={this.props.staffs.staffs.filter(staff => staff.id === parseInt(match.params.staffId, 10))[0]}
           isLoading={this.props.staffs.isLoading}
           errMess={this.props.staffs.errMess}
           departments={this.props.departments.departments}
@@ -87,14 +88,8 @@ class Main extends Component {
     const DeptStaffsList = ({ match }) => {
       return (
         <DeptStaffs
-          department={
-            this.props.departments.departments.filter(
-              department => department.id === match.params.departmentId
-            )[0]
-          }
-          deptStaffs={this.props.staffs.staffs.filter(
-            staff => staff.departmentId === match.params.departmentId
-          )}
+          department={this.props.departments.departments.filter(department => department.id === match.params.departmentId)[0]}
+          deptStaffs={this.props.staffs.staffs.filter(staff => staff.departmentId === match.params.departmentId)}
         />
       );
     };
@@ -107,16 +102,7 @@ class Main extends Component {
           <Route path="/staffs/:staffId" component={StaffWithId} />
           <Route exact path="/departments" component={DepartmentList} />
           <Route path="/departments/:departmentId" component={DeptStaffsList} />
-          <Route
-            path="/salary"
-            component={() => (
-              <Salary
-                staffs={this.props.salary.salary}
-                isLoading={this.props.salary.isLoading}
-                errMess={this.props.salary.errMess}
-              />
-            )}
-          />
+          <Route path="/salary" component={() => <Salary staffs={this.props.salary.salary} isLoading={this.props.salary.isLoading} errMess={this.props.salary.errMess} />} />
           <Redirect to="/staffs" />
         </Switch>
         <Footer />

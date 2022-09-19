@@ -9,75 +9,56 @@ export const addStaff = staff => ({
   payload: staff,
 });
 
-//Upload
-export const postStaff =
-  (
-    name,
-    doB,
-    salaryScale,
-    startDate,
-    department,
-    annualLeave,
-    overTime
-  ) =>
-  dispatch => {
-    const newStaff = {
-      id: 100,
-      name: name,
-      doB: doB,
-      salaryScale: salaryScale,
-      startDate: startDate,
-      departmentId: DEPARTMENTS.filter(
-        dept => dept.name === department
-      )[0].id,
-      annualLeave: annualLeave,
-      overTime: overTime,
-      image: '/assets/images/alberto.png',
-      salary:
-        salaryScale * 3000000 + overTime * 200000,
-    };
-
-    return fetch(baseUrl + 'staffs', {
-      method: 'POST',
-      body: JSON.stringify(newStaff),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'same-origin',
-    })
-      .then(
-        response => {
-          if (response.ok) {
-            return response;
-          } else {
-            var error = new Error(
-              'Error ' +
-                response.status +
-                ': ' +
-                response.statusText
-            );
-            error.response = response;
-            throw error;
-          }
-        },
-        error => {
+export const postStaff = newStaff => dispatch => {
+  return fetch(baseUrl + 'staffs', {
+    method: 'POST',
+    body: JSON.stringify(newStaff),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'same-origin',
+  })
+    .then(
+      response => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error('Error ' + response.status + ': ' + response.statusText);
+          error.response = response;
           throw error;
         }
-      )
-      .then(response => response.json())
-      .then(response => {
-        dispatch(addStaff(response));
-      })
-      .catch(error => {
-        console.log('post staff', error.message);
-        alert(
-          "Your staff's information could not be uploaded\nError: " +
-            error.message
-        );
-      });
-  };
+      },
+      error => {
+        throw error;
+      }
+    )
+    .then(response => response.json())
+    .then(response => {
+      dispatch(addStaff(response));
+    })
+    .catch(error => {
+      console.log('post staff', error.message);
+      alert("Your staff's information could not be uploaded\nError: " + error.message);
+    });
+};
 
 //Xóa nhân viên
+export const deleteStaffSuccess = id => ({
+  type: ActionTypes.DELETE_STAFF,
+  payload: id,
+});
+
+export const deleteStaff = id => dispatch => {
+  if (confirm('Bạn chắc chắn muốn xóa nhân viên này?')) {
+    return fetch(baseUrl + `staffs/${id}`, {
+      method: 'DELETE',
+    }).then(() => {
+      dispatch(deleteStaffSuccess(id));
+    });
+  } else return;
+};
+
+//Cập nhật
 
 //Staffs
 export const fetchStaffs = () => dispatch => {
@@ -103,16 +84,13 @@ export const addStaffs = staffs => ({
 });
 
 //Departments
-export const fetchDepartments =
-  () => dispatch => {
-    dispatch(departmentsLoading(true));
+export const fetchDepartments = () => dispatch => {
+  dispatch(departmentsLoading(true));
 
-    return fetch(baseUrl + 'departments')
-      .then(response => response.json())
-      .then(departments =>
-        dispatch(addDepartments(departments))
-      );
-  };
+  return fetch(baseUrl + 'departments')
+    .then(response => response.json())
+    .then(departments => dispatch(addDepartments(departments)));
+};
 
 export const departmentsLoading = () => ({
   type: ActionTypes.DEPARTMENTS_LOADING,
