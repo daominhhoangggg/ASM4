@@ -55,7 +55,6 @@ export const deleteStaff = id => dispatch => {
     })
       .then(response => response.json())
       .then(response => {
-        console.log(response);
         dispatch(deleteStaffSuccess(response));
       });
   } else return;
@@ -102,7 +101,9 @@ export const fetchDepartments = () => dispatch => {
 
   return fetch(baseUrl + 'departments')
     .then(response => response.json())
-    .then(departments => dispatch(addDepartments(departments)));
+    .then(departments => {
+      dispatch(addDepartments(departments));
+    });
 };
 
 export const departmentsLoading = () => ({
@@ -117,6 +118,29 @@ export const departmentsFailed = errmess => ({
 export const addDepartments = departments => ({
   type: ActionTypes.ADD_DEPARTMENTS,
   payload: departments,
+});
+
+//Departments' Staffs
+export const fetchDeptStaffs = departmentId => dispatch => {
+  dispatch(deptStaffsLoading(true));
+
+  return fetch(baseUrl + `departments/${departmentId}`)
+    .then(response => response.json())
+    .then(deptStaffs => dispatch(addDeptStaffs(deptStaffs)));
+};
+
+export const deptStaffsLoading = () => ({
+  type: ActionTypes.DEPTSTAFFS_LOADING,
+});
+
+export const deptStaffsFailed = errmess => ({
+  type: ActionTypes.DEPTSTAFFS_FAILED,
+  payload: errmess,
+});
+
+export const addDeptStaffs = deptStaffs => ({
+  type: ActionTypes.ADD_DEPTSTAFFS,
+  payload: deptStaffs,
 });
 
 //Salary

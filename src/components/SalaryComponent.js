@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Card, CardHeader, CardText } from 'reactstrap';
 import formatDecimal from 'format-decimal';
+import { Loading } from './LoadingComponent';
+import { fetchSalary } from '../redux/ActionCreators';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 function RenderSalary({ staff }) {
   return (
@@ -18,20 +22,58 @@ function RenderSalary({ staff }) {
   );
 }
 
-const Salary = props => {
-  const salary = props.staffs.map(staff => {
-    return (
-      <div key={staff.id} className="col-12 col-md-6 col-lg-4">
-        <RenderSalary staff={staff} />
-      </div>
-    );
-  });
-
-  return (
-    <div className="container my-3">
-      <div className="row">{salary}</div>
-    </div>
-  );
+const mapStateToProps = state => {
+  return {
+    salary: state.salary,
+  };
 };
 
-export default Salary;
+const mapDispatchToProps = dispatch => ({
+  fetchSalary: () => {
+    dispatch(fetchSalary());
+  },
+});
+
+class Salary extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.props.fetchSalary();
+  }
+
+  render() {
+    const salary = this.props.salary.salary.map(staff => {
+      return (
+        <div key={staff.id} className="col-12 col-md-6 col-lg-4">
+          <RenderSalary staff={staff} />
+        </div>
+      );
+    });
+
+    if (this.props.salary.isLoading) {
+      return (
+        <div className="container my-3">
+          <div className="row">
+            <Loading />
+          </div>
+        </div>
+      );
+    } else if (this.props.salary.errMess) {
+      <div className="container my-3">
+        <div className="row">
+          <h4>{this.props.salary.errMess}</h4>
+        </div>
+      </div>;
+    } else {
+      return (
+        <div className="container my-3">
+          <div className="row">{salary}</div>
+        </div>
+      );
+    }
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Salary));

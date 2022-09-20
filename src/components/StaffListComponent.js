@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardImg, CardImgOverlay, CardText, Form, FormGroup, Col, Button, Input } from 'reactstrap';
+import { Card, CardImg, CardText, Form, FormGroup, Col, Button, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import NewStaffForm from './NewStaffFormComponent';
 import { Loading } from './LoadingComponent';

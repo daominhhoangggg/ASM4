@@ -7,14 +7,12 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { postStaff, deleteStaff, fetchStaffs, fetchDepartments, fetchSalary } from '../redux/ActionCreators';
+import { postStaff, deleteStaff, fetchStaffs, fetchDepartments } from '../redux/ActionCreators';
 import DeptStaffs from './DeptDetailComponent';
 
 const mapStateToProps = state => {
   return {
     staffs: state.staffs,
-    departments: state.departments,
-    salary: state.salary,
   };
 };
 
@@ -28,12 +26,6 @@ const mapDispatchToProps = dispatch => ({
   fetchStaffs: () => {
     dispatch(fetchStaffs());
   },
-  fetchDepartments: () => {
-    dispatch(fetchDepartments());
-  },
-  fetchSalary: () => {
-    dispatch(fetchSalary());
-  },
 });
 
 class Main extends Component {
@@ -43,8 +35,6 @@ class Main extends Component {
 
   componentDidMount() {
     this.props.fetchStaffs();
-    this.props.fetchDepartments();
-    this.props.fetchSalary();
   }
 
   render() {
@@ -65,32 +55,24 @@ class Main extends Component {
     const StaffWithId = ({ match }) => {
       return (
         <StaffDetail
-          staff={this.props.staffs.staffs.filter(staff => staff.id === parseInt(match.params.staffId, 10))[0]}
+          staff={
+            this.props.staffs.staffs.filter(
+              staff => staff.id === parseInt(match.params.staffId, 10)
+            )[0]
+          }
           isLoading={this.props.staffs.isLoading}
           errMess={this.props.staffs.errMess}
-          departments={this.props.departments.departments}
         />
       );
     };
 
     const DepartmentList = () => {
-      return (
-        <Departments
-          staffs={this.props.staffs.staffs}
-          departments={this.props.departments.departments}
-          onClick={departmentId => this.onDepartmentSelect(departmentId)}
-          deptLoading={this.props.departments.isLoading}
-          deptErrMess={this.props.departments.errMess}
-        />
-      );
+      return <Departments onClick={departmentId => this.onDepartmentSelect(departmentId)} />;
     };
 
     const DeptStaffsList = ({ match }) => {
       return (
-        <DeptStaffs
-          department={this.props.departments.departments.filter(department => department.id === match.params.departmentId)[0]}
-          deptStaffs={this.props.staffs.staffs.filter(staff => staff.departmentId === match.params.departmentId)}
-        />
+        <DeptStaffs departmentId={match.params.departmentId} onDelete={this.props.deleteStaff} />
       );
     };
 
@@ -102,7 +84,7 @@ class Main extends Component {
           <Route path="/staffs/:staffId" component={StaffWithId} />
           <Route exact path="/departments" component={DepartmentList} />
           <Route path="/departments/:departmentId" component={DeptStaffsList} />
-          <Route path="/salary" component={() => <Salary staffs={this.props.salary.salary} isLoading={this.props.salary.isLoading} errMess={this.props.salary.errMess} />} />
+          <Route path="/salary" component={() => <Salary />} />
           <Redirect to="/staffs" />
         </Switch>
         <Footer />

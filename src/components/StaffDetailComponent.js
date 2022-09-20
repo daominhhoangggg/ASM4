@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Breadcrumb, BreadcrumbItem, Button, Card, CardBody, CardImg, Col, Row } from 'reactstrap';
 import dateFormat from 'dateformat';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
-import { baseUrl } from '../shared/baseUrl';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { fetchDepartments } from '../redux/ActionCreators';
 
 function RenderStaff({ staff, department }) {
   return (
@@ -32,43 +34,65 @@ function RenderStaff({ staff, department }) {
   );
 }
 
-const StaffDetail = props => {
-  if (props.isLoading) {
-    return (
-      <div className="container my-3">
-        <div className="row">
-          <Loading />
-        </div>
-      </div>
-    );
-  } else if (props.errMess) {
-    return (
-      <div className="container my-3">
-        <div className="row">
-          <h4>{props.errMess}</h4>
-        </div>
-      </div>
-    );
-  } else if (props.staff != null) {
-    const departmentName = props.departments.filter(department => department.id == props.staff.departmentId)[0].name;
-    return (
-      <div className="container my-3">
-        <div className="row">
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <Link to="/staffs">Nhân viên</Link>
-            </BreadcrumbItem>
-            <BreadcrumbItem active>{props.staff.name}</BreadcrumbItem>
-          </Breadcrumb>
-        </div>
-        <div className="row">
-          <RenderStaff staff={props.staff} department={departmentName} />
-        </div>
-      </div>
-    );
-  } else {
-    return <div></div>;
-  }
+const mapStateToProps = state => {
+  return {
+    departments: state.departments,
+  };
 };
 
-export default StaffDetail;
+const mapDispatchToProps = dispatch => ({
+  fetchDepartments: () => {
+    dispatch(fetchDepartments());
+  },
+});
+
+class StaffDetail extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.props.fetchDepartments();
+  }
+
+  render() {
+    if (this.props.isLoading) {
+      return (
+        <div className="container my-3">
+          <div className="row">
+            <Loading />
+          </div>
+        </div>
+      );
+    } else if (this.props.errMess) {
+      return (
+        <div className="container my-3">
+          <div className="row">
+            <h4>{this.props.errMess}</h4>
+          </div>
+        </div>
+      );
+    } else if (this.props.staff != null && !this.props.departments.isLoading) {
+      const departmentName = this.props.departments.departments.filter(dept => dept.id === this.props.staff.departmentId)[0].name;
+      return (
+        <div className="container my-3">
+          <div className="row">
+            <Breadcrumb>
+              <BreadcrumbItem>
+                <Link to="/staffs">Nhân viên</Link>
+              </BreadcrumbItem>
+              <BreadcrumbItem active>{this.props.staff.name}</BreadcrumbItem>
+            </Breadcrumb>
+          </div>
+          <div className="row">
+            <RenderStaff staff={this.props.staff} department={departmentName} />
+          </div>
+        </div>
+      );
+    } else {
+      return <div></div>;
+    }
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(StaffDetail));

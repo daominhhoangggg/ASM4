@@ -4,6 +4,7 @@ import { Departments } from './departments';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { Salary } from './salary';
+import { DeptStaffs } from './deptstaffs';
 
 export const ConfigureStore = () => {
   const store = createStore(
@@ -11,6 +12,7 @@ export const ConfigureStore = () => {
       staffs: Staffs,
       departments: Departments,
       salary: Salary,
+      deptStaffs: DeptStaffs,
     }),
     applyMiddleware(thunk, logger)
   );

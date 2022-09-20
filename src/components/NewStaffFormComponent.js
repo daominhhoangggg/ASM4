@@ -19,7 +19,7 @@ class NewStaffForm extends Component {
       doB: '',
       startDate: '',
       salaryScale: 1,
-      department: '',
+      department: 'Sale',
       annualLeave: 0,
       overTime: 0,
       touched: {
@@ -52,6 +52,7 @@ class NewStaffForm extends Component {
       image: '/assets/images/alberto.png',
       salary: Number(values.salaryScale) * 3000000 + Number(values.overTime) * 200000,
     };
+    console.log(newStaff);
     this.props.postStaff(newStaff);
   }
 
@@ -156,7 +157,13 @@ class NewStaffForm extends Component {
                   Phòng ban
                 </Label>
                 <Col md={8}>
-                  <Control.select model=".department" id="department" name="department" className="form-control">
+                  <Control.select
+                    model=".department"
+                    id="department"
+                    name="department"
+                    className="form-control"
+                    defaultValue="Sale"
+                  >
                     {departmentOptions}
                   </Control.select>
                 </Col>
@@ -166,13 +173,21 @@ class NewStaffForm extends Component {
                   Hệ số lương
                 </Label>
                 <Col md={8}>
-                  <Control.text model=".salaryScale" id="salaryScale" name="salaryScale" placeholder="1" className="form-control" validators={{ isNumber }} />
+                  <Control.text
+                    model=".salaryScale"
+                    id="salaryScale"
+                    name="salaryScale"
+                    placeholder="1"
+                    className="form-control"
+                    defaultValue={1}
+                    validators={{ isNumber }}
+                  />
                   <Errors
                     className="text-danger"
                     model=".salaryScale"
                     show="touched"
                     messages={{
-                      isNumber: 'Điền chữ số !',
+                      isNumber: 'Số không hợp lệ',
                     }}
                   />
                 </Col>
@@ -182,13 +197,21 @@ class NewStaffForm extends Component {
                   Số ngày nghỉ còn lại
                 </Label>
                 <Col md={8}>
-                  <Control.text model=".annualLeave" id="annualLeave" name="annualLeave" placeholder="0" className="form-control" validators={{ isNumber }} />
+                  <Control.text
+                    model=".annualLeave"
+                    id="annualLeave"
+                    name="annualLeave"
+                    placeholder="0"
+                    className="form-control"
+                    defaultValue={0}
+                    validators={{ isNumber }}
+                  />
                   <Errors
                     className="text-danger"
                     model=".annualLeave"
                     show="touched"
                     messages={{
-                      isNumber: 'Điền chữ số !',
+                      isNumber: 'Số không hợp lệ',
                     }}
                   />
                 </Col>
@@ -198,13 +221,21 @@ class NewStaffForm extends Component {
                   Số ngày đã làm thêm
                 </Label>
                 <Col md={8}>
-                  <Control.text model=".overTime" id="overTime" name="overTime" placeholder="0" className="form-control" validators={{ isNumber }} />
+                  <Control.text
+                    model=".overTime"
+                    id="overTime"
+                    name="overTime"
+                    placeholder="0"
+                    className="form-control"
+                    defaultValue={0}
+                    validators={{ isNumber }}
+                  />
                   <Errors
                     className="text-danger"
                     model=".overTime"
                     show="touched"
                     messages={{
-                      isNumber: 'Điền chữ số !',
+                      isNumber: 'Số không hợp lệ',
                     }}
                   />
                 </Col>
